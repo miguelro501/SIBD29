@@ -6,18 +6,18 @@ DROP TABLE taxi CASCADE CONSTRAINTS;
 DROP TABLE periodo CASCADE CONSTRAINTS;
 DROP TABLE turno CASCADE CONSTRAINTS;
 DROP TABLE viagem;
---DROP SEQUENCE viagem_seq
---DROP SEQUENCE morada_seq
+DROP SEQUENCE viagem_seq;
+DROP SEQUENCE morada_seq;
 
---CREATE SEQUENCE viagem_seq
---    START WITH 1
---    MINVALUE 1
---    INCREMENT BY 1;
+CREATE SEQUENCE viagem_seq
+    START WITH 0
+    MINVALUE 0
+    INCREMENT BY 1;
 
---CREATE SEQUENCE morada_seq
---    START WITH 1
---    MINVALUE 1
---    INCREMENT BY 1;
+CREATE SEQUENCE morada_seq
+    START WITH 0
+    MINVALUE 0
+    INCREMENT BY 1;
     
 CREATE TABLE morada (
   id               NUMBER(5),
@@ -166,7 +166,7 @@ CREATE TABLE viagem (
   taxi,
   turno_inicio_periodo,
   turno_fim_periodo,
-  sequencia             NUMBER(3),
+  sequencia             NUMBER(2),
   numero_de_pessoas     NUMBER(2)   CONSTRAINT nn_viagem_numero_pessoas NOT NULL,
   inicio_periodo                    CONSTRAINT nn_viagem_inicio_periodo NOT NULL,
   fim_periodo                       CONSTRAINT nn_viagem_fim_periodo NOT NULL,  
@@ -209,10 +209,10 @@ CREATE TABLE viagem (
 -- insert morada.
 
 INSERT INTO morada (id, rua, numero_da_porta, codigo_postal, localidade)
-     VALUES (1, 'Rua alexandre', 2, 4021, 'Porto');
+     VALUES (morada_seq.nextval, 'Rua alexandre', 2, 4021, 'Porto');
 
 INSERT INTO morada (id, rua, numero_da_porta, codigo_postal, localidade)
-     VALUES (2, 'Rua fernao', 3, 5025, 'Lisboa');
+     VALUES (morada_seq.nextval, 'Rua fernao', 3, 5025, 'Lisboa');
 
 -- ----------------------------------------------------------------------------
 -- insert periodo.
@@ -310,12 +310,11 @@ INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minut
 -- ----------------------------------------------------------------------------
 -- insert viagem.
 
-
 INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia, numero_de_pessoas, inicio_periodo, fim_periodo, partida, chegada, km_percorridos)
      VALUES ('917258197', 'BD82KL',
      TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
-     '1', '1', 
+     viagem_seq.nextval, '1', 
      TO_DATE('2010/05/03 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      TO_DATE('2010/05/03 11:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '1', '2', '10');
@@ -324,7 +323,7 @@ INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, se
      VALUES ('957264182', 'AA25BC',
       TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'),
-     '2', '3', 
+     viagem_seq.nextval, '3', 
      TO_DATE('2017/05/03 20:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      TO_DATE('2017/05/04 21:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '2', '1', '10');

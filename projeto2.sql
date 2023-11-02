@@ -217,13 +217,30 @@ INSERT INTO morada (id, rua, numero_da_porta, codigo_postal, localidade)
 -- ----------------------------------------------------------------------------
 -- insert periodo.
 
+--periodo do turno 1
 INSERT INTO periodo (inicio, fim)
-     VALUES (TO_DATE('2010/05/03 15:02:44', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2010/05/03 21:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+     VALUES (
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'));
 
+--periodo do turno 2
 INSERT INTO periodo (inicio, fim)
-     VALUES (TO_DATE('2017/05/03 15:02:44', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2017/05/04 16:02:44', 'yyyy/mm/dd hh24:mi:ss'));
+     VALUES (
+     TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+     
+--periodo dentro do turno 1
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2010/05/03 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 11:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+
+--periodo dentro do turno 2
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2017/05/03 20:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 21:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+     
 
 -- ----------------------------------------------------------------------------
 -- insert taxi.
@@ -280,14 +297,14 @@ INSERT INTO motorista (nif, id_morada, carta_conducao, ano_nascimento)
 
 INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minuto)
      VALUES ('917258197', 'BD82KL', 
-     TO_DATE('2010/05/03 15:02:44', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2010/05/03 21:02:44', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '1.5');
 
 INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minuto)
      VALUES ('957264182', 'AA25BC',
-     TO_DATE('2017/05/03 15:02:44', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2017/05/04 16:02:44', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '2.0');
      
 -- ----------------------------------------------------------------------------
@@ -295,10 +312,22 @@ INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minut
 
 
 INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia, numero_de_pessoas, inicio_periodo, fim_periodo, partida, chegada, km_percorridos)
-     VALUES ();
+     VALUES ('917258197', 'BD82KL',
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '1', '1', 
+     TO_DATE('2010/05/03 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 11:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '1', '2', '10');
 
-INSERT INTO viagem ()
-     VALUES ();
+INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia, numero_de_pessoas, inicio_periodo, fim_periodo, partida, chegada, km_percorridos)
+     VALUES ('957264182', 'AA25BC',
+      TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '2', '3', 
+     TO_DATE('2017/05/03 20:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 21:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '2', '1', '10');
      
 -- ----------------------------------------------------------------------------
 

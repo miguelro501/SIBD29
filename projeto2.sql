@@ -1,12 +1,24 @@
-DROP TABLE viagem;
-DROP TABLE turno;
-DROP TABLE motorista;
+DROP TABLE motorista CASCADE CONSTRAINTS;
 DROP TABLE cliente;
 DROP TABLE pessoa;
-DROP TABLE taxi;
-DROP TABLE periodo;
-DROP TABLE morada;
+DROP TABLE morada CASCADE CONSTRAINTS;
+DROP TABLE taxi CASCADE CONSTRAINTS;
+DROP TABLE periodo CASCADE CONSTRAINTS;
+DROP TABLE turno CASCADE CONSTRAINTS;
+DROP TABLE viagem;
+DROP SEQUENCE viagem_seq;
+DROP SEQUENCE morada_seq;
 
+CREATE SEQUENCE viagem_seq
+    START WITH 0
+    MINVALUE 0
+    INCREMENT BY 1;
+
+CREATE SEQUENCE morada_seq
+    START WITH 0
+    MINVALUE 0
+    INCREMENT BY 1;
+    
 CREATE TABLE morada (
   id               NUMBER(5),
   rua              VARCHAR(40) CONSTRAINT nn_morada_rua NOT NULL,
@@ -15,7 +27,13 @@ CREATE TABLE morada (
   localidade       VARCHAR(40) CONSTRAINT nn_morada_localidade NOT NULL,
 --
   CONSTRAINT pk_morada
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+--
+  CONSTRAINT ck_morada_numero_da_porta
+  CHECK (numero_da_porta > 0),
+--
+  CONSTRAINT ck_morada_codigo_postal
+  CHECK (codigo_postal > 0)
 );
 
 ------------------------------------------------------------------------------
@@ -84,9 +102,9 @@ CREATE TABLE cliente (
 
 CREATE TABLE motorista (
   nif,
-  id_morada,                  CONSTRAINT nn_motorista_id_morada NOT NULL,
-  carta_conducao    NUMBER(9) CONSTRAINT nn_motorista_carta_conducao NOT NULL,
-  ano_nascimento    DATE      CONSTRAINT nn_motorista_ano_nascimento NOT NULL,
+  id_morada,
+  carta_conducao NUMBER(9) CONSTRAINT nn_motorista_carta_conducao NOT NULL,
+  ano_nascimento DATE CONSTRAINT nn_motorista_ano_nascimento NOT NULL,
 --
   CONSTRAINT pk_motorista
     PRIMARY KEY (nif),
@@ -103,10 +121,7 @@ CREATE TABLE motorista (
     UNIQUE (carta_conducao),
 --
   CONSTRAINT ck_motorista_carta_conducao
-    CHECK ((LENGTH (carta_conducao) = 9) AND (carta_conducao > 0)),
---
-  CONSTRAINT ck_motorista_ano_nascimento
-    CHECK ((EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM ano_nascimento) >= 18))
+    CHECK (LENGTH(carta_conducao) = 9 AND carta_conducao > 0)
 );
 
 -----------------------------------------------------------------------------
@@ -135,30 +150,31 @@ CREATE TABLE turno (
 --
   CONSTRAINT ck_turno_preco_por_minuto
     CHECK (preco_por_minuto > 0.0)
-    
+    --
     -- Sophie: nao sei como incorporar as RIAS 7 e 8 no turno
-    
+    --
     -- RIA 7 - O taxi nao consegue referenciar atributos do turno nem o turno do taxi, e portanto,
     -- nao da para comparar a data de compra do taxi e a data de inicio do turno
-    
+    --
     -- RIA 8 - Mesma situacao que na RIA 7, nao da para comparar dois turnos e ver se
     -- dao overlap
 );
     
 -----------------------------------------------------------------------------
 
+
 CREATE TABLE viagem (
   motorista,
   taxi,
   turno_inicio_periodo,
   turno_fim_periodo,
-  sequencia             NUMBER(4),
+  sequencia             NUMBER(2),
   numero_de_pessoas     NUMBER(2)   CONSTRAINT nn_viagem_numero_pessoas NOT NULL,
   inicio_periodo                    CONSTRAINT nn_viagem_inicio_periodo NOT NULL,
   fim_periodo                       CONSTRAINT nn_viagem_fim_periodo NOT NULL,  
   partida                           CONSTRAINT nn_viagem_partida NOT NULL,
   chegada                           CONSTRAINT nn_viagem_chegada NOT NULL,
-  km_percorridos        NUMBER(6)   CONSTRAINT nn_viagem_km_percorridos NOT NULL,
+  km_percorridos        NUMBER(6,1)   CONSTRAINT nn_viagem_km_percorridos NOT NULL,
 --
   CONSTRAINT pk_viagem
     PRIMARY KEY (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia),
@@ -181,14 +197,140 @@ CREATE TABLE viagem (
     REFERENCES morada (id),
 --
   CONSTRAINT ck_viagem_numero_de_pessoas
-    CHECK (numero_de_pessoas > 0) 
+    CHECK (numero_de_pessoas > 0),
 --
   CONSTRAINT ck_viagem_km_percorridos
-    CHECK (km_percorridos > 0)
---
-  CONSTRAINT ck_viagem_contida_no_periodo
-    CHECK ((inicio_periodo > turno_inicio_periodo) AND (fim_periodo < turno_fim_periodo))
+    CHECK (km_percorridos > 0.0)
+    --
     -- RIA-18 Nao esta a verificar que o numero de sequencia tem de 
     -- começar em 1, nao sei como fazer
     --
 );
+
+-- ----------------------------------------------------------------------------
+-- insert morada.
+
+INSERT INTO morada (id, rua, numero_da_porta, codigo_postal, localidade)
+     VALUES (morada_seq.nextval, 'Rua alexandre', 2, 4021, 'Porto');
+
+INSERT INTO morada (id, rua, numero_da_porta, codigo_postal, localidade)
+     VALUES (morada_seq.nextval, 'Rua fernao', 3, 5025, 'Lisboa');
+
+-- ----------------------------------------------------------------------------
+-- insert periodo.
+
+--periodo do turno 1
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+
+--periodo do turno 2
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+     
+--periodo dentro do turno 1
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2010/05/03 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 11:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+
+--periodo dentro do turno 2
+INSERT INTO periodo (inicio, fim)
+     VALUES (
+     TO_DATE('2017/05/03 20:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 21:00:00', 'yyyy/mm/dd hh24:mi:ss'));
+     
+
+-- ----------------------------------------------------------------------------
+-- insert taxi.
+
+INSERT INTO taxi (matricula, ano_compra, marca, modelo, nivel_conforto)
+     VALUES ('AA25BC',
+     TO_DATE('2005/05/03', 'yyyy/mm/dd'),
+     'Renault',
+     'Clio',
+     'basico');
+
+INSERT INTO taxi (matricula, ano_compra, marca, modelo, nivel_conforto)
+     VALUES ('BD82KL',
+     TO_DATE('2004/02/05', 'yyyy/mm/dd'),
+     'Audi',
+     'A5',
+     'luxuoso');
+     
+-- ----------------------------------------------------------------------------
+-- insert pessoa.
+
+INSERT INTO pessoa (nif, genero, nome)
+     VALUES (816592018, 'F', 'Catarina');
+    
+INSERT INTO pessoa (nif, genero, nome)
+     VALUES (825162957, 'F', 'Joana');
+
+INSERT INTO pessoa (nif, genero, nome)
+     VALUES (917258197, 'M', 'Joao');
+     
+INSERT INTO pessoa (nif, genero, nome)
+     VALUES (957264182, 'M', 'Pedro');
+          
+-- ----------------------------------------------------------------------------
+-- insert cliente.
+
+INSERT INTO cliente (nif)
+     VALUES (816592018);
+
+INSERT INTO cliente (nif)
+     VALUES (825162957);
+     
+-- ----------------------------------------------------------------------------
+-- insert motorista.
+
+INSERT INTO motorista (nif, id_morada, carta_conducao, ano_nascimento)
+     VALUES (917258197, 1, 252856261, TO_DATE('1998/02/05', 'yyyy/mm/dd'));
+
+INSERT INTO motorista (nif, id_morada, carta_conducao, ano_nascimento)
+     VALUES (957264182, 2, 721956172, TO_DATE('1997/02/05', 'yyyy/mm/dd'));
+          
+-- ----------------------------------------------------------------------------
+-- insert turno.
+
+INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minuto)
+     VALUES (917258197, 'BD82KL', 
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     1.5);
+
+INSERT INTO turno (motorista, taxi, inicio_periodo, fim_periodo, preco_por_minuto)
+     VALUES (957264182, 'AA25BC',
+     TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     2.0);
+     
+-- ----------------------------------------------------------------------------
+-- insert viagem.
+
+INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia, numero_de_pessoas, inicio_periodo, fim_periodo, partida, chegada, km_percorridos)
+     VALUES (917258197, 'BD82KL',
+     TO_DATE('2010/05/03 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     viagem_seq.nextval, 1, 
+     TO_DATE('2010/05/03 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2010/05/03 11:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     1, 2, 10.0);
+
+INSERT INTO viagem (motorista, taxi, turno_inicio_periodo, turno_fim_periodo, sequencia, numero_de_pessoas, inicio_periodo, fim_periodo, partida, chegada, km_percorridos)
+     VALUES (957264182, 'AA25BC',
+      TO_DATE('2017/05/03 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 22:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     viagem_seq.nextval, 3, 
+     TO_DATE('2017/05/03 20:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2017/05/04 21:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     2, 1, 10.0);
+     
+-- ----------------------------------------------------------------------------
+
+COMMIT;
+-- ----------------------------------------------------------------------------

@@ -286,7 +286,6 @@ ORDER BY Nome ASC, Nif DESC;
 SELECT Nif, Nome, Genero, Ano, TotalFaturado
 FROM (
     SELECT M.nif AS Nif, M.nome AS Nome, M.genero AS Genero, EXTRACT(YEAR FROM V.fim) AS Ano,
-        minutos_que_passaram(V.inicio, V.fim) AS minutos,
         SUM(minutos_que_passaram(V.inicio, V.fim) * T.eurosminuto) AS TotalFaturado,
         MAX(SUM(minutos_que_passaram(V.inicio, V.fim) * T.eurosminuto)) OVER (PARTITION BY EXTRACT(YEAR FROM V.fim), M.genero) AS MaxTotalFaturado
     FROM motorista M

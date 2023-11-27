@@ -85,10 +85,16 @@ INSERT INTO motorista (nif, nome, genero, nascimento , localidade)
      VALUES ('917258193','Beatriz Afonso' ,'F', '2002', ' Porto');
 
 INSERT INTO motorista (nif, nome, genero, nascimento , localidade)
-     VALUES ('917258194','Beatriz Afonso' ,'F', '2002', ' Porto');
+     VALUES ('917258194','Catarina Afonso' ,'F', '2002', ' Porto');
 
 INSERT INTO motorista (nif, nome, genero, nascimento , localidade)
-     VALUES ('917258195','Beatriz Afonso' ,'F', '2002', ' Porto');
+     VALUES ('917258195','joana Afonso' ,'F', '2002', ' Porto');
+    
+INSERT INTO motorista (nif, nome, genero, nascimento , localidade)
+     VALUES ('917258111','Joao Pedro' ,'M', '2002', ' Porto');
+    
+INSERT INTO motorista (nif, nome, genero, nascimento , localidade)
+     VALUES ('917258112','Duarte Afonso' ,'M', '2002', ' Porto');
 -- ----------------------------------------------------------------------------
 -- insert taxi.
 
@@ -104,8 +110,7 @@ INSERT INTO taxi (matricula, ano, marca, conforto, eurosminuto)
      '1999',
      'Renault',
      'L',
-     '2.0');
-
+     '3.0');
 
 INSERT INTO taxi (matricula, ano, marca, conforto, eurosminuto)
      VALUES ('BB22BB',
@@ -113,7 +118,20 @@ INSERT INTO taxi (matricula, ano, marca, conforto, eurosminuto)
      'Audi',
      'L',
      '3.0');
-     
+
+INSERT INTO taxi (matricula, ano, marca, conforto, eurosminuto)
+     VALUES ('BA22BB',
+     '2005',
+     'Audi',
+     'L',
+     '5.0');
+    
+INSERT INTO taxi (matricula, ano, marca, conforto, eurosminuto)
+     VALUES ('CB22CB',
+     '2005',
+     'Lancia',
+     'L',
+     '3.0');
 -- ----------------------------------------------------------------------------
 -- insert viagem.
 
@@ -125,26 +143,68 @@ INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
 
 INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
      VALUES ('917258192', 'BB22BB',
-     TO_DATE('2022/12/31 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/12/31 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      TO_DATE('2023/12/31 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '3');
      
 INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
      VALUES ('917258193', 'AA11AA',
-     TO_DATE('2023/11/23 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2023/12/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '3');
      
 INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
      VALUES ('917258194', 'BB22BB',
-     TO_DATE('2023/11/23 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2023/12/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '3');
 
 INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
      VALUES ('917258195', 'BA11AA',
+     TO_DATE('2023/11/24 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '3');
+
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258111', 'BA11AA',
      TO_DATE('2023/11/23 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
-     TO_DATE('2023/12/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2023/11/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '3');
+     
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258112', 'BA22BB',
+     TO_DATE('2022/12/22 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/12/22 10:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '3');
+
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258194', 'BB22BB',
+     TO_DATE('2022/11/23 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/11/24 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '3');
+
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258111', 'CB22CB',
+     TO_DATE('2022/9/12 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/9/13 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '2');
+     
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258112', 'CB22CB',
+     TO_DATE('2022/9/15 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/9/16 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '2');
+     
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258112', 'CB22CB',
+     TO_DATE('2022/9/18 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/9/19 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     '2');
+     
+INSERT INTO viagem (motorista, taxi , inicio, fim, passageiros)
+     VALUES ('917258111', 'CB22CB',
+     TO_DATE('2022/9/24 9:00:00', 'yyyy/mm/dd hh24:mi:ss'),
+     TO_DATE('2022/9/25 18:00:00', 'yyyy/mm/dd hh24:mi:ss'),
      '3');
      
 -- ----------------------------------------------------------------------------
@@ -176,7 +236,68 @@ AND (EXTRACT(YEAR FROM V.inicio) = 2023
 AND EXTRACT (YEAR FROM V.fim) = 2023
 ORDER BY Idade ASC, M.nome ASC, T.marca DESC, T.matricula DESC;
 
+-----------------------------------------------------------------------------------
 
+/*
+2. NIF e nome dos motoristas masculinos que, considerando apenas viagens iniciadas em
+2022 (não deve ser considerada a data de fim das viagens), ou não conduziram táxis da
+marca Lancia ou conduziram táxis dessa marca em até duas viagens. Adicionalmente, os
+motoristas resultantes não podem ter conduzido táxis comprados antes de 2000, indepen-
+dentemente do ano das viagens. O resultado deve vir ordenado pelo nome dos motoristas
+de forma ascendente e pelo NIF de forma descendente.
+Variantes com menor cotação: a) sem a verificação dos motoristas nunca terem conduzido
+táxis comprados antes de 2000; e b) sem a verificação do número de viagens que conduzi-
+ram em 2022.
+*/
+
+SELECT DISTINCT M.nif AS Nif, M.nome AS Nome
+FROM motorista M
+WHERE M.genero = 'M'
+AND ((SELECT COUNT(*)
+      FROM viagem V, taxi T
+      WHERE V.motorista = M.nif
+      AND V.taxi = T.matricula
+      AND T.ano < 2000) = 0)
+AND ((SELECT COUNT(*)
+      FROM viagem V, taxi T
+      WHERE V.motorista = M.nif
+      AND (EXTRACT (YEAR FROM V.inicio)) = 2022
+      AND V.taxi = T.matricula
+      AND UPPER (T.marca) = 'LANCIA') < 3)
+ORDER BY Nome ASC, Nif DESC;
+
+--pergunta 4
+--NIF e nome dos motoristas que faturaram mais euros em viagens em cada ano, separada-
+--mente para motoristas masculinos e femininos, devendo o género dos motoristas e o total
+--faturado em cada ano também aparecer no resultado. Considere que o valor de faturação
+--de uma viagem corresponde ao preço por minuto do táxi, em euros, a multiplicar pelos
+--minutos que passaram entre o início e o fim da viagem. A ordenação do resultado deve ser
+--pelo ano de forma descendente e pelo género dos motoristas de forma ascendente. No caso
+--de haver mais do que um(a) motorista com o mesmo máximo de faturação num ano, de-
+--vem ser mostrados todos esses motoristas. Nota: para efeitos de determinação do ano de
+--faturação, deve ser considerada a data de fim de cada viagem (mesmo que a viagem tenha
+--começado no ano anterior). Nota: por conveniência, está disponível a função minutos_-
+--que_passaram, que calcula quantos minutos passaram entre duas datas.1
+--Variantes com menor cotação: a) mostrar o total faturado em viagens por cada motorista
+--em cada ano, sem verificar se foram os/as que mais faturaram; e b) sem a distinção entre
+--motoristas femininos e masculinos.
+--SELECT minutos_que_passaram(SYSDATE, SYSDATE + 1)
+
+SELECT Nif, Nome, Genero, Ano, TotalFaturado
+FROM (
+    SELECT M.nif AS Nif, M.nome AS Nome, M.genero AS Genero, EXTRACT(YEAR FROM V.fim) AS Ano,
+        minutos_que_passaram(V.inicio, V.fim) AS minutos,
+        SUM(minutos_que_passaram(V.inicio, V.fim) * T.eurosminuto) AS TotalFaturado,
+        MAX(SUM(minutos_que_passaram(V.inicio, V.fim) * T.eurosminuto)) OVER (PARTITION BY EXTRACT(YEAR FROM V.fim), M.genero) AS MaxTotalFaturado
+    FROM motorista M
+        JOIN viagem V ON M.nif = V.motorista
+        JOIN taxi T ON V.taxi = T.matricula
+    GROUP BY M.nif, M.nome, M.genero,
+        EXTRACT(YEAR FROM V.fim),
+        minutos_que_passaram(V.inicio, V.fim)
+)
+WHERE TotalFaturado = MaxTotalFaturado
+ORDER BY Ano DESC, Genero ASC;
 
 
 
